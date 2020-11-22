@@ -21,7 +21,7 @@ class RozetkaScheduledService(
     @Lazy
     private lateinit var telegramBot: ProductMonitoringBot
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 300000)
     fun processSubscribedProducts() {
         monitoredProductsStorage.findAll()
                 .filter { it.seller == Seller.ROZETKA }
