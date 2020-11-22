@@ -20,6 +20,13 @@
 		<kotlin.version>1.4.10</kotlin.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>jcenter</id>
+			<url>https://jcenter.bintray.com</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -47,9 +54,24 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-serialization</artifactId>
+			<version>1.4.20</version>
+		</dependency>
+		<dependency>
+			<groupId>io.ktor</groupId>
+			<artifactId>ktor-client-core-jvm</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.ktor</groupId>
+			<artifactId>ktor-client-apache</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.telegram</groupId>
@@ -75,11 +97,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<jvmArguments>
-						-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5000
-					</jvmArguments>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
