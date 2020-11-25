@@ -6,6 +6,7 @@ import com.skylsv.productmonitoringbot.data.RozetkaProductInfo
 import com.skylsv.productmonitoringbot.data.Seller
 import com.skylsv.productmonitoringbot.repository.MonitoredProductsStorage
 import com.skylsv.productmonitoringbot.utils.Constants
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.scheduling.annotation.Scheduled
@@ -21,8 +22,11 @@ class RozetkaScheduledService(
     @Lazy
     private lateinit var telegramBot: ProductMonitoringBot
 
+    private val logger = LoggerFactory.getLogger(RozetkaScheduledService::class.java)
+
     @Scheduled(fixedDelay = 300000)
     fun processSubscribedProducts() {
+        logger.info("Running scheduled service to check products from Rozetka")
         monitoredProductsStorage.findAll()
                 .filter { it.seller == Seller.ROZETKA }
                 .forEach {product ->
@@ -31,10 +35,10 @@ class RozetkaScheduledService(
                         notifyUserAboutUpdate(product, currentProductInfo)
                         product.price = currentProductInfo.priceString
                         product.state = currentProductInfo.sellStatus
-                        monitoredProductsStorage.deleteByProductIdAndSeller(product.productId, product.seller)
                         monitoredProductsStorage.save(product)
                     }
                 }
+        logger.info("Finished scheduled service for Rozetka")
     }
 
     private fun notifyUserAboutUpdate(product: Product, currentProductInfo: RozetkaProductInfo) {
@@ -49,7 +53,7 @@ class RozetkaScheduledService(
         if (message.isNotEmpty()) {
             message += product.productLink
         }
-        telegramBot.sendInlineKeyBoardMessage(product.chatId, message, "Отписаться", "remove|${product.productId}|${product.seller.name}")
+        telegramBot.sendInlineKeyBoardMessage(product.chatId!!, message, "Отписаться", "remove|${product.id}")
     }
 
 }

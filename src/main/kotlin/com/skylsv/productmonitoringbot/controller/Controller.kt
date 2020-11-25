@@ -1,6 +1,7 @@
 package com.skylsv.productmonitoringbot.controller
 
 import com.skylsv.productmonitoringbot.bot.ProductMonitoringBot
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -13,5 +14,10 @@ class Controller(private val monitoringBot: ProductMonitoringBot) {
     @PostMapping("/")
     fun onWebhookUpdateReceived(@RequestBody update: Update): BotApiMethod<*> {
         return monitoringBot.onWebhookUpdateReceived(update)
+    }
+
+    @GetMapping("/")
+    fun onGetRequest(): String {
+        return "I'm alive"
     }
 }

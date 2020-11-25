@@ -2,13 +2,13 @@ package com.skylsv.productmonitoringbot.repository
 
 import com.skylsv.productmonitoringbot.data.Product
 import com.skylsv.productmonitoringbot.data.Seller
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MonitoredProductsStorage : MongoRepository<Product, String> {
+interface MonitoredProductsStorage : CrudRepository<Product, Long> {
 
     fun findByChatId(chatId: String) : List<Product>
 
-    fun deleteByProductIdAndSeller(productId: String, seller: Seller)
+    fun findBySellerAndChatIdAndProductId(seller: Seller, chatId: String, productId: String) : Product?
 }
