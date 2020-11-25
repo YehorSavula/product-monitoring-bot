@@ -5,7 +5,8 @@ class Constants {
         val ROZETKA_STATUSES = mapOf(
                 "unavailable" to "Нет в наличии",
                 "active" to "В наличии",
-                "limited" to "Заканчивается"
+                "limited" to "Заканчивается",
+                "available" to "В наличии"
         )
     }
 }

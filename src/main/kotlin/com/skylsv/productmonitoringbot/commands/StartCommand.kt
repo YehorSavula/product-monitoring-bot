@@ -11,7 +11,7 @@ class StartCommand : Command {
 
     override fun execute(update: Update): SendMessage {
         val sendMessage = SendMessage()
-        sendMessage.text = "Привет, ${update.message.chat.userName} я умею отслеживать изменение наличия и цен товаров на розетке, я уведомлю тебя как только что-то изменится"
+        sendMessage.text = "Привет, ${update.message.chat.firstName} ${update.message.chat.lastName} я умею отслеживать изменение наличия и цен товаров на розетке, я уведомлю тебя как только что-то изменится"
         sendMessage.chatId = update.message.chatId.toString()
 
         return sendMessage
