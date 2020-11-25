@@ -31,9 +31,7 @@ class ProductMonitoringBot(
         keyboard.keyboard = listOf(
                 KeyboardRow().apply {
                     add(KeyboardButton("Помощь"))
-                },
-                KeyboardRow().apply {
-                    add(KeyboardButton("Показать список отслеживаемых товаров"))
+                    add(KeyboardButton("Показать список товаров"))
                 }
         )
 

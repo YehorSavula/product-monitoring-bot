@@ -17,14 +17,14 @@ class ShowProductsListCommand(
     @Lazy
     private lateinit var telegramBot: ProductMonitoringBot
 
-    override fun canHandle(text: String): Boolean = text == "Показать список отслеживаемых товаров"
+    override fun canHandle(text: String): Boolean = text == "Показать список товаров"
 
     override fun execute(update: Update): SendMessage {
         val monitoredProducts = monitoredProductsStorage.findByChatId(update.message.chatId.toString())
 
         monitoredProducts.forEach { product ->
-            telegramBot.sendInlineKeyBoardMessage(product.chatId, product.productLink, "Отписаться",
-                    "remove|${product.productId}|${product.seller.name}")
+            telegramBot.sendInlineKeyBoardMessage(product.chatId!!, product.productLink!!, "Отписаться",
+                    "remove|${product.id}")
         }
 
         return SendMessage(update.message.chatId.toString(), "Вот ваши подписки")

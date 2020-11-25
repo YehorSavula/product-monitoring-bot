@@ -23,10 +23,14 @@ class AddProductFromRozetkaCommand(
         val productLink = update.message.text
         val productId = ROZETKA_REGEXP.find(productLink)?.groupValues?.get(1)
 
-        val productInfo = rozetkaClient.getProductInfo(productId)
+        val existedProduct = monitoredProductsStorage.findBySellerAndChatIdAndProductId(Seller.ROZETKA, update.message.chatId.toString(), productId!!)
+        if (existedProduct != null) {
+            return SendMessage(update.message.chatId.toString(), "Продукт уже добавлен!")
+        }
 
+        val productInfo = rozetkaClient.getProductInfo(productId)
         monitoredProductsStorage.save(Product(Seller.ROZETKA, productLink, update.message.chatId.toString(),
-                productInfo.priceString, productInfo.sellStatus, productId!!))
+                productInfo.priceString, productInfo.sellStatus, productId))
         return SendMessage(update.message.chatId.toString(), "Продукт добавлен!\nЦена: ${productInfo.price}, " +
                 "Статус: ${Constants.ROZETKA_STATUSES[productInfo.sellStatus]}")
     }
