@@ -2,29 +2,28 @@ package com.skylsv.productmonitoringbot.services
 
 import com.google.gson.Gson
 import com.skylsv.productmonitoringbot.data.RozetkaProductInfo
-import io.ktor.client.*
-import io.ktor.client.engine.apache.*
-import io.ktor.client.request.*
-import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
+import org.springframework.http.client.ClientHttpRequestFactory
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
 
 @Service
 class RozetkaClient {
 
-    private val GET_PRODUCT_INFO = "https://common-api.rozetka.com.ua/v2/goods/get-price/?id=%s"
+    private val GET_PRODUCT_INFO = "https://common-api.rozetka.com.ua/v2/goods/get-price/?id={productId}"
     private val logger = LoggerFactory.getLogger(RozetkaClient::class.java)
 
     fun getProductInfo(productId: String?): RozetkaProductInfo {
-        return Gson().fromJson(executeGetRequest(GET_PRODUCT_INFO.format(productId)), RozetkaProductInfo::class.java)
+        val restTemplate = RestTemplate(getClientHttpRequestFactory())
+        logger.info("Sending request to the ROZETKA, getting info for product = {}", productId)
+        return Gson().fromJson(restTemplate.getForObject(GET_PRODUCT_INFO, String::class.java, productId),
+                RozetkaProductInfo::class.java)
     }
 
-    private fun executeGetRequest(requestUrl: String): String {
-        val client = HttpClient(Apache)
-        logger.info("Sending request to the $requestUrl")
-
-        return runBlocking {
-            client.get(requestUrl)
-        }
+    fun getClientHttpRequestFactory() : ClientHttpRequestFactory {
+        val clientHttpRequestFactory = HttpComponentsClientHttpRequestFactory()
+        clientHttpRequestFactory.setConnectTimeout(5000)
+        return clientHttpRequestFactory
     }
 }
