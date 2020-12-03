@@ -11,4 +11,6 @@ interface MonitoredProductsStorage : CrudRepository<Product, Long> {
     fun findByChatId(chatId: String) : List<Product>
 
     fun findBySellerAndChatIdAndProductId(seller: Seller, chatId: String, productId: String) : Product?
+
+    fun deleteByChatId(chatId: String) : Long
 }

@@ -1,6 +1,7 @@
 package com.skylsv.productmonitoringbot.bot
 
 import com.skylsv.productmonitoringbot.bot.configuration.TelegramBotConfig
+import com.skylsv.productmonitoringbot.repository.MonitoredProductsStorage
 import com.skylsv.productmonitoringbot.services.CommandsExecutorService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramWebhookBot
@@ -12,12 +13,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 
 
 @Component
 class ProductMonitoringBot(
         val config: TelegramBotConfig,
-        val commandsExecutorService: CommandsExecutorService
+        val commandsExecutorService: CommandsExecutorService,
+        val monitoredProductStorage: MonitoredProductsStorage
 ) : TelegramWebhookBot() {
 
     override fun getBotToken() = config.token
@@ -28,6 +31,7 @@ class ProductMonitoringBot(
         val sendMessage: SendMessage = commandsExecutorService.executeCommand(update)
 
         val keyboard = ReplyKeyboardMarkup()
+        keyboard.resizeKeyboard = true
         keyboard.keyboard = listOf(
                 KeyboardRow().apply {
                     add(KeyboardButton("Помощь"))
@@ -54,6 +58,12 @@ class ProductMonitoringBot(
         sendMessage.chatId = chatId
         sendMessage.replyMarkup = inlineKeyboardMarkup
 
-        execute(sendMessage)
+        try {
+            execute(sendMessage)
+        } catch (e: TelegramApiRequestException) {
+            if (e.apiResponse == "Forbidden: bot was blocked by the user") {
+                commandsExecutorService.removeAllRecordsForUser(chatId)
+            }
+        }
     }
 }

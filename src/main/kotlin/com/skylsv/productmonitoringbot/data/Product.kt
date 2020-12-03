@@ -6,7 +6,8 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-class Product {
+class Product : Cloneable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
@@ -25,5 +26,17 @@ class Product {
         this.price = price
         this.state = state
         this.productId = productId
+    }
+
+    public override fun clone(): Product {
+        val product = Product()
+        product.id = this.id
+        product.chatId = this.chatId
+        product.price = this.price
+        product.productId = this.productId
+        product.productLink = this.productLink
+        product.seller = this.seller
+        product.state = this.state
+        return product
     }
 }

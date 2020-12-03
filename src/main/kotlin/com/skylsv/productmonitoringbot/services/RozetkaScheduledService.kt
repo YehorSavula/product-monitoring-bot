@@ -32,10 +32,11 @@ class RozetkaScheduledService(
                 .forEach {product ->
                     val currentProductInfo = rozetkaClient.getProductInfo(product.productId)
                     if (currentProductInfo.priceString != product.price || currentProductInfo.sellStatus != product.state) {
-                        notifyUserAboutUpdate(product, currentProductInfo)
+                        val oldProductInfo = product.clone()
                         product.price = currentProductInfo.priceString
                         product.state = currentProductInfo.sellStatus
                         monitoredProductsStorage.save(product)
+                        notifyUserAboutUpdate(oldProductInfo, currentProductInfo)
                     }
                 }
         logger.info("Finished scheduled service for Rozetka")
