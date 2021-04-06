@@ -24,7 +24,7 @@ class RozetkaScheduledService(
 
     private val logger = LoggerFactory.getLogger(RozetkaScheduledService::class.java)
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 60000)
     fun processSubscribedProducts() {
         logger.info("Running scheduled service to check products from Rozetka")
         monitoredProductsStorage.findAll()
