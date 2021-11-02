@@ -7,7 +7,8 @@ class Constants {
                 "active" to "В наличии",
                 "limited" to "Заканчивается",
                 "available" to "В наличии",
-                "out_of_stock" to "Товар закончился"
+                "out_of_stock" to "Товар закончился",
+                "waiting_for_supply" to "Ожидается поставка"
         )
     }
 }
