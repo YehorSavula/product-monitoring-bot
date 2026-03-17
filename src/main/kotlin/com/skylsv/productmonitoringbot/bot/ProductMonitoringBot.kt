@@ -25,7 +25,7 @@ class ProductMonitoringBot(
 
     override fun getBotToken() = config.token
     override fun getBotUsername() = config.username
-    override fun getBotPath() = config.username
+    override fun getBotPath() = config.token
 
     override fun onWebhookUpdateReceived(update: Update): BotApiMethod<*> {
         val sendMessage: SendMessage = commandsExecutorService.executeCommand(update)
